@@ -1,6 +1,6 @@
 package com.example.travelmantics.models
 
-class TravelDeal(
+data class TravelDeal(
     var id: String? = null,
     var title: String? = null,
     var description: String? = null,
