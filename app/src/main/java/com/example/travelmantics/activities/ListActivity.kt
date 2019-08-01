@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.travelmantics.R
 import com.example.travelmantics.models.TravelDeal
+import com.example.travelmantics.utils.FirebaseUtil
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_list.*
 
@@ -21,8 +22,9 @@ class ListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mFirebaseDatabase!!.reference.child("traveldeals")
+        FirebaseUtil.openFirebaseReference("traveldeals")
+        mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase
+        mDatabaseReference = FirebaseUtil.mDatabaseReference!!
 
         mChildEventListener = object : ChildEventListener {
 

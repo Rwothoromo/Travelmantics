@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.travelmantics.R
 import com.example.travelmantics.models.TravelDeal
+import com.example.travelmantics.utils.FirebaseUtil
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_insert.*
@@ -23,10 +24,9 @@ class InsertActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_insert)
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance()
-
-        // the path we want to reach
-        mDatabaseReference = mFirebaseDatabase!!.reference.child("traveldeals")
+        FirebaseUtil.openFirebaseReference("traveldeals")
+        mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase
+        mDatabaseReference = FirebaseUtil.mDatabaseReference!!
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
