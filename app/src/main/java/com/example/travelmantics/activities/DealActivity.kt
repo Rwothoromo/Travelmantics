@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_insert.*
 
-class InsertActivity : AppCompatActivity() {
+class DealActivity : AppCompatActivity() {
 
     // entry point for the db
     private var mFirebaseDatabase: FirebaseDatabase? = null
@@ -53,7 +53,7 @@ class InsertActivity : AppCompatActivity() {
         val description = txtDescription.text.toString()
         val price = txtPrice.text.toString()
 
-        val travelDeal = TravelDeal(title, description, price)
+        val travelDeal = TravelDeal(id = null, title = title, description = description, price = price)
 
         // insert object to db
         mDatabaseReference?.push()?.setValue(travelDeal)
