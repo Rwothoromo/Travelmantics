@@ -18,7 +18,9 @@ object FirebaseUtil {
             mFirebaseDatabase = FirebaseDatabase.getInstance()
         }
 
-        mTravelDeals = ArrayList()
+        // called each time the class is called
+        // Take note that <TravelDeal> must be there!
+        mTravelDeals = ArrayList<TravelDeal>()
 
         // the path we want to reach
         mDatabaseReference = mFirebaseDatabase!!.reference.child(ref)

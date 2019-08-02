@@ -34,7 +34,7 @@ class ListActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.insert_menu -> {
-                intent = Intent(this, DealActivity::class.java)
+                intent = Intent(this, TravelDealActivity::class.java)
                 startActivity(intent)
                 return true
             }

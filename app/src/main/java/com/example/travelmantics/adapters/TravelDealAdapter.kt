@@ -1,9 +1,11 @@
 package com.example.travelmantics.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelmantics.R
+import com.example.travelmantics.activities.TravelDealActivity
 import com.example.travelmantics.holders.TravelDealViewHolder
 import com.example.travelmantics.models.TravelDeal
 import com.example.travelmantics.utils.FirebaseUtil
@@ -89,6 +91,12 @@ class TravelDealAdapter : RecyclerView.Adapter<TravelDealViewHolder>() {
         // get the travel deal at current position and bind to the holder
         val travelDeal = travelDeals[position]
         holder.bind(travelDeal)
+
+        holder.itemView.setOnClickListener { view ->
+            val intent = Intent(view!!.context, TravelDealActivity::class.java)
+            intent.putExtra("Deal", travelDeal)
+            view.context.startActivity(intent)
+        }
     }
 
     /**
