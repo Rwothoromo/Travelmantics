@@ -6,4 +6,6 @@
     <string name="save_menu">Save</string>
     <string name="on_child_added">%1$s \n %2$s</string>
     <string name="delete_deal">Delete</string>
+    <string name="add_deal">New Travel Deal</string>
+    <string name="log_out">Log out</string>
 </resources>

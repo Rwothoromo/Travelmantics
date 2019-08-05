@@ -9,21 +9,20 @@ import com.example.travelmantics.activities.TravelDealActivity
 import com.example.travelmantics.holders.TravelDealViewHolder
 import com.example.travelmantics.models.TravelDeal
 import com.example.travelmantics.utils.FirebaseUtil
-import com.google.firebase.database.*
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+
 
 class TravelDealAdapter : RecyclerView.Adapter<TravelDealViewHolder>() {
 
     var travelDeals = ArrayList<TravelDeal>()
 
-    private var mFirebaseDatabase: FirebaseDatabase
-    private var mDatabaseReference: DatabaseReference
+    private var mDatabaseReference: DatabaseReference = FirebaseUtil.mDatabaseReference!!
     private var mChildEventListener: ChildEventListener
 
     init {
-        FirebaseUtil.openFirebaseReference("traveldeals")
-        mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase!!
-        mDatabaseReference = FirebaseUtil.mDatabaseReference!!
-
         travelDeals = FirebaseUtil.mTravelDeals!!
 
         mChildEventListener = object : ChildEventListener {
