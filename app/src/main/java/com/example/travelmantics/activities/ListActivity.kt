@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelmantics.R
 import com.example.travelmantics.adapters.TravelDealAdapter
+import com.example.travelmantics.utils.FirebaseUtil
+import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.activity_list.*
 
 class ListActivity : AppCompatActivity() {
@@ -16,13 +18,6 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
-
-        val travelDealAdapter = TravelDealAdapter()
-        rvTravelDeals.adapter = travelDealAdapter
-
-        // set a LinearLayoutManager on the RecyclerView
-        val travelDealsLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        rvTravelDeals.layoutManager = travelDealsLayoutManager
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -38,7 +33,36 @@ class ListActivity : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
+            R.id.logout_menu -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        FirebaseUtil.attachListener()
+                    }
+                FirebaseUtil.detachListener()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        FirebaseUtil.detachListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        FirebaseUtil.openFirebaseReference("traveldeals", this)
+
+        val travelDealAdapter = TravelDealAdapter()
+        rvTravelDeals.adapter = travelDealAdapter
+
+        // set a LinearLayoutManager on the RecyclerView
+        val travelDealsLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        rvTravelDeals.layoutManager = travelDealsLayoutManager
+
+        FirebaseUtil.attachListener()
     }
 }

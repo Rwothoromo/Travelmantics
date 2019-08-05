@@ -28,7 +28,7 @@ class TravelDealActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_insert)
 
-        FirebaseUtil.openFirebaseReference("traveldeals")
+        FirebaseUtil.openFirebaseReference("traveldeals", this)
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase
         mDatabaseReference = FirebaseUtil.mDatabaseReference!!
 
