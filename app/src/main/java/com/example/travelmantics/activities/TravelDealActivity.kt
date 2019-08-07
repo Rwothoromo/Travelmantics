@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.travelmantics.R
@@ -22,7 +21,7 @@ class TravelDealActivity : AppCompatActivity() {
     // location in the db where we read/write data
     private var mDatabaseReference: DatabaseReference? = null
 
-    private var travelDeal: TravelDeal? = null
+    private var travelDeal: TravelDeal = TravelDeal()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,15 +29,17 @@ class TravelDealActivity : AppCompatActivity() {
 
         FirebaseUtil.openFirebaseReference("traveldeals", this)
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase
-        mDatabaseReference = FirebaseUtil.mDatabaseReference!!
+        mDatabaseReference = FirebaseUtil.mDatabaseReference
 
-        val txtTitle = findViewById<EditText>(R.id.txtTitle)
-        travelDeal = intent.getSerializableExtra("Deal") as TravelDeal
+        val deal = intent.getSerializableExtra("Deal")
+        if (deal != null) {
+            travelDeal = deal as TravelDeal
+        }
 
         // for EditText fields/views, use setText
-        txtTitle.setText(travelDeal!!.title)
-        txtDescription.setText(travelDeal!!.description)
-        txtPrice.setText(travelDeal!!.price)
+        txtTitle.setText(travelDeal.title)
+        txtDescription.setText(travelDeal.description)
+        txtPrice.setText(travelDeal.price)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -72,29 +73,25 @@ class TravelDealActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
     private fun saveDeal() {
-        travelDeal?.title = txtTitle.text.toString()
-        travelDeal?.description = txtDescription.text.toString()
-        travelDeal?.price = txtPrice.text.toString()
 
-        if (travelDeal?.id == null) {
+        travelDeal.title = txtTitle.text.toString()
+        travelDeal.description = txtDescription.text.toString()
+        travelDeal.price = txtPrice.text.toString()
+
+        if (travelDeal.id == null) {
             // insert object to db
             mDatabaseReference?.push()?.setValue(travelDeal)
         } else {
             // edit the db value with the matching id
-            mDatabaseReference?.child(travelDeal!!.id.toString())?.setValue(travelDeal)
+            mDatabaseReference?.child(travelDeal.id.toString())?.setValue(travelDeal)
         }
     }
 
     private fun deleteDeal() {
-        if (travelDeal == null) {
-            Toast.makeText(this, "A deal has to be saved before it can actually be deleted!", Toast.LENGTH_LONG).show()
-            return
-        }
 
         // delete the db value with the matching id
-        mDatabaseReference?.child(travelDeal!!.id.toString())?.removeValue()
+        mDatabaseReference?.child(travelDeal.id.toString())?.removeValue()
     }
 
     private fun clean() {
@@ -105,7 +102,6 @@ class TravelDealActivity : AppCompatActivity() {
         // give focus to the title field
         txtTitle.requestFocus()
     }
-
 
     private fun backToList() {
         intent = Intent(this, ListActivity::class.java)
