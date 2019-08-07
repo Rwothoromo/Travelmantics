@@ -27,7 +27,6 @@ class TravelDealActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_insert)
 
-        FirebaseUtil.openFirebaseReference("traveldeals", this)
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase
         mDatabaseReference = FirebaseUtil.mDatabaseReference
 
@@ -44,6 +43,17 @@ class TravelDealActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.save_menu, menu)
+
+        if (FirebaseUtil.isAdmin) {
+            menu?.findItem(R.id.delete_menu)?.isVisible = true
+            menu?.findItem(R.id.save_menu)?.isVisible = true
+            enableEditTexts(true)
+        } else {
+            menu?.findItem(R.id.delete_menu)?.isVisible = false
+            menu?.findItem(R.id.save_menu)?.isVisible = false
+            enableEditTexts(false)
+        }
+
         return true
     }
 
@@ -104,7 +114,13 @@ class TravelDealActivity : AppCompatActivity() {
     }
 
     private fun backToList() {
-        intent = Intent(this, ListActivity::class.java)
+        intent = Intent(this, TravelDealListActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun enableEditTexts(isEnabled: Boolean) {
+        txtTitle.isEnabled = isEnabled
+        txtDescription.isEnabled = isEnabled
+        txtPrice.isEnabled = isEnabled
     }
 }

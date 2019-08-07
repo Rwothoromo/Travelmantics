@@ -1,12 +1,12 @@
 package com.example.travelmantics.utils
 
-import android.app.Activity
+import android.util.Log
 import android.widget.Toast
+import com.example.travelmantics.activities.TravelDealListActivity
 import com.example.travelmantics.models.TravelDeal
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import java.util.*
 
 object FirebaseUtil {
@@ -17,15 +17,24 @@ object FirebaseUtil {
     var mTravelDeals: ArrayList<TravelDeal>? = null
     private var mFirebaseAuth: FirebaseAuth? = null
     var mAuthStateListener: FirebaseAuth.AuthStateListener? = null
-    private const val RC_SIGN_IN = 793 // request code assigned for starting the new activity, it can be any number
+    private const val RC_SIGN_IN = 123 // request code assigned for starting the new activity, it can be any number
+    var isAdmin: Boolean = false
+    var userId: String? = null
+    private var caller = TravelDealListActivity()
 
-    fun openFirebaseReference(ref: String, callerActivity: Activity) {
+    fun openFirebaseReference(ref: String, callerActivity: TravelDealListActivity) {
         firebaseUtil = FirebaseUtil
         mFirebaseDatabase = FirebaseDatabase.getInstance()
         mFirebaseAuth = FirebaseAuth.getInstance()
+
+        caller = callerActivity
+
         mAuthStateListener = FirebaseAuth.AuthStateListener {
             if (mFirebaseAuth!!.currentUser == null) {
-                signIn(callerActivity)
+                signIn()
+            } else {
+                userId = mFirebaseAuth!!.uid
+                checkAdmin(userId)
             }
             Toast.makeText(callerActivity.baseContext, "Welcome back!", Toast.LENGTH_LONG).show()
         }
@@ -38,6 +47,36 @@ object FirebaseUtil {
         mDatabaseReference = mFirebaseDatabase!!.reference.child(ref)
     }
 
+    private fun checkAdmin(uid: String?) {
+        val databaseReference = uid?.let { mFirebaseDatabase?.reference?.child("administrators")?.child(it) }
+
+        val childEventListener = object : ChildEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d("databaseError", p0.toString())
+            }
+
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+                //
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                //
+            }
+
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                isAdmin = true
+                caller.showMenu()
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+                //
+            }
+        }
+
+        // set the listener to the db reference
+        databaseReference?.addChildEventListener(childEventListener)
+    }
+
     fun attachListener() {
         mAuthStateListener?.let { mFirebaseAuth?.addAuthStateListener(it) }
     }
@@ -46,7 +85,7 @@ object FirebaseUtil {
         mAuthStateListener?.let { mFirebaseAuth?.removeAuthStateListener(it) }
     }
 
-    fun signIn(callerActivity: Activity) {
+    private fun signIn() {
         // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
@@ -54,7 +93,7 @@ object FirebaseUtil {
         )
 
         // Create and launch sign-in intent
-        callerActivity.startActivityForResult(
+        caller.startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)

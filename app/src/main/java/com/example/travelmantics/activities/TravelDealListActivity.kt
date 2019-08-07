@@ -13,15 +13,20 @@ import com.example.travelmantics.utils.FirebaseUtil
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.activity_list.*
 
-class ListActivity : AppCompatActivity() {
+class TravelDealListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
+
+        invalidateOptionsMenu()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.list_activity_menu, menu)
+
+        menu?.findItem(R.id.insert_menu)?.isVisible = FirebaseUtil.isAdmin
+
         return true
     }
 
@@ -64,5 +69,10 @@ class ListActivity : AppCompatActivity() {
         rvTravelDeals.layoutManager = travelDealsLayoutManager
 
         FirebaseUtil.attachListener()
+    }
+
+    fun showMenu() {
+        // tell android that menu contents have changed so it redraws the menu
+        invalidateOptionsMenu()
     }
 }
