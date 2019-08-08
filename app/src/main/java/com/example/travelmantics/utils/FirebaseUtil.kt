@@ -3,10 +3,13 @@ package com.example.travelmantics.utils
 import android.util.Log
 import android.widget.Toast
 import com.example.travelmantics.activities.TravelDealListActivity
+import com.example.travelmantics.constants.Constants.RC_SIGN_IN
 import com.example.travelmantics.models.TravelDeal
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import java.util.*
 
 object FirebaseUtil {
@@ -16,8 +19,10 @@ object FirebaseUtil {
     private var firebaseUtil: FirebaseUtil = FirebaseUtil
     var mTravelDeals: ArrayList<TravelDeal>? = null
     private var mFirebaseAuth: FirebaseAuth? = null
-    var mAuthStateListener: FirebaseAuth.AuthStateListener? = null
-    private const val RC_SIGN_IN = 123 // request code assigned for starting the new activity, it can be any number
+    var mFirebaseStorage: FirebaseStorage? = null
+    var mStorageReference: StorageReference? = null
+
+    private var mAuthStateListener: FirebaseAuth.AuthStateListener? = null
     var isAdmin: Boolean = false
     var userId: String? = null
     private var caller = TravelDealListActivity()
@@ -38,6 +43,9 @@ object FirebaseUtil {
             }
             Toast.makeText(callerActivity.baseContext, "Welcome back!", Toast.LENGTH_LONG).show()
         }
+
+        // grant access to upload files to Firebase
+        connectStorage()
 
         // called each time the class is called
         // Take note that <TravelDeal> must be there!
@@ -100,5 +108,10 @@ object FirebaseUtil {
                 .build(),
             RC_SIGN_IN
         )
+    }
+
+    private fun connectStorage() {
+        mFirebaseStorage = FirebaseStorage.getInstance()
+        mStorageReference = mFirebaseStorage!!.reference.child("deals_pictures")
     }
 }

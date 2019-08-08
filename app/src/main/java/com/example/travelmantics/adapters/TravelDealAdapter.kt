@@ -30,7 +30,6 @@ class TravelDealAdapter : RecyclerView.Adapter<TravelDealViewHolder>() {
             // the DataSnapshot is an immutable copy of data from a Firebase database location
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                Log.d("onChildAdded", "onChildAdded:" + dataSnapshot.key!!)
 
                 // serialize the data using the getValue and put it in the TravelDeal class
                 val travelDeal = dataSnapshot.getValue(TravelDeal::class.java)
@@ -46,29 +45,19 @@ class TravelDealAdapter : RecyclerView.Adapter<TravelDealViewHolder>() {
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                Log.d("onChildChanged", "onChildChanged: ${dataSnapshot.key}")
-
-                // A travel deal has changed, use the key to determine if we are displaying this
-                // travel deal and if so displayed the changed travel deal.
+                //
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-//                Log.d("onChildRemoved", "onChildRemoved:" + dataSnapshot.key!!)
-
-                // A travel deal has changed, use the key to determine if we are displaying this
-                // travel deal and if so remove it.
+                //
             }
 
             override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                Log.d("onChildMoved", "onChildMoved:" + dataSnapshot.key!!)
-
-                // A travel deal has changed position, use the key to determine if we are
-                // displaying this travel deal and if so move it.
+                //
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-//                Log.w("onCancelled", "onCancelled", databaseError.toException())
-//                Toast.makeText(this, "Failed to load travel deals.", Toast.LENGTH_SHORT).show()
+                //
             }
         }
 
